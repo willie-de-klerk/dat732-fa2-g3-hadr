@@ -6,12 +6,17 @@
 
 //Parameters
 
+
 //data type: string
 param sVaultName string
 param sLocation string
-
+param sRoleAssignmentName string
+param sRoleAssignmentPrincipalId string 
+param sRoleAssignmentPrincipalType string
+param sRoleDefinitionIdOrName string
 //data type: bool
 param bEnableSoftDelete bool
+
 
 
 module vault 'br/public:avm/res/key-vault/vault:0.13.3' = {
@@ -20,6 +25,14 @@ module vault 'br/public:avm/res/key-vault/vault:0.13.3' = {
         name: sVaultName
         enableSoftDelete: bEnableSoftDelete
         location: sLocation
+        roleAssignments: [
+            {
+                name: sRoleAssignmentName
+                principalId: sRoleAssignmentPrincipalId
+                principalType: sRoleAssignmentPrincipalType
+                roleDefinitionIdOrName: sRoleDefinitionIdOrName
+            }
+        ]
     }
 } 
 
