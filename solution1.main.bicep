@@ -7,6 +7,8 @@ targetScope='subscription'
 
 
 //Parameters
+// data type: array
+param arrLocationSecondary array 
 
 // data type: string 
 param sResourceGroupName string
@@ -15,7 +17,7 @@ param sLocationPrimary string
 param sRoleAssignmentName string 
 param sRoleAssignmentPrincipalType string
 param sRoleDefinitionIdOrName string
-
+param sSQLServerInstanceName string
       //SQL Server Specific
 param sMinimalTLSVersion string
 param sPublicNetworkAccessEnabled string 
@@ -70,7 +72,7 @@ module createtestsecret '.bicep/m-create-secret.bicep' = {
 
 module deploysqlserver 'modules/m-create-sql-srv.bicep' = {
   params:{
-    sName: 'sqlPrimaryServerDeploy'
+    sName: sSQLServerInstanceName
     sAdministratorLoginUserName: sSQLAdministratorLoginUserName
     sAdministratorLoginPassword: sSQLAdministratorLoginPassword
     sIsIPv6Enabled: sIsIPv6Enabled
@@ -80,8 +82,25 @@ module deploysqlserver 'modules/m-create-sql-srv.bicep' = {
   }
   scope: az.resourceGroup(sResourceGroupName)
   
-  dependsOn: [deploykeyvault , createresourcegroup , createtestsecret]
+  dependsOn: [createresourcegroup]
 }
+
+// secondary instances
+
+module deploysqlserversecondary 'modules/m-create-sql-srv.bicep' = [for location in arrLocationSecondary: {
+  name: '${sSQLServerInstanceName}-bak-${location}'
+  params: {
+    sName: '${sSQLServerInstanceName}-bak-${location}'
+    sAdministratorLoginPassword: sSQLAdministratorLoginPassword
+    sAdministratorLoginUserName: sSQLAdministratorLoginUserName
+    sLocation: location
+    sPublicNetworkAccessEnabled: sPublicNetworkAccessEnabled
+    sIsIPv6Enabled: sIsIPv6Enabled
+    sMinimalTLSVersion: sMinimalTLSVersion
+  }
+  scope: az.resourceGroup(sResourceGroupName)
+  dependsOn: [createresourcegroup]
+}]
 
 
 
