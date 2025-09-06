@@ -13,6 +13,10 @@ param sRoleAssignmentName = '00482a5a-887f-4fb3-b363-3b7fe8e74483'
 param sRoleAssignmentPrincipalType = 'User'
 param sRoleDefinitionIdOrName = '00482a5a-887f-4fb3-b363-3b7fe8e74483'
 
+  //SQL Server Instance Specific
+param sMinimalTLSVersion = '1.2'
+param sPublicNetworkAccessEnabled = 'Enabled'
+param sIsIPv6Enabled = 'Disabled'
 
 param sSQLAdministratorLoginUserName = 'AzureAdmin' 
 @Secure()

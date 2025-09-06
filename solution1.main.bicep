@@ -16,6 +16,12 @@ param sRoleAssignmentName string
 param sRoleAssignmentPrincipalType string
 param sRoleDefinitionIdOrName string
 
+      //SQL Server Specific
+param sMinimalTLSVersion string
+param sPublicNetworkAccessEnabled string 
+param sIsIPv6Enabled string
+
+
 param sSQLAdministratorLoginUserName string
 @secure()
 param sSQLAdministratorLoginPassword string
@@ -58,9 +64,24 @@ module createtestsecret '.bicep/m-create-secret.bicep' = {
   }
   scope: resourceGroup(sResourceGroupName)
   dependsOn: [deploykeyvault]
-} // From this point forward, we will only access the sql admin login credentials from our key vault. 
+} //We cannot reference the password from the vault in this bicep file, since we are creating the vault in this file. 
 
+// primary  SQL server resource instance
 
+module deploysqlserver 'modules/m-create-sql-srv.bicep' = {
+  params:{
+    sName: 'sqlPrimaryServerDeploy'
+    sAdministratorLoginUserName: sSQLAdministratorLoginUserName
+    sAdministratorLoginPassword: sSQLAdministratorLoginPassword
+    sIsIPv6Enabled: sIsIPv6Enabled
+    sLocation: sLocationPrimary
+    sMinimalTLSVersion: sMinimalTLSVersion
+    sPublicNetworkAccessEnabled: sPublicNetworkAccessEnabled
+  }
+  scope: az.resourceGroup(sResourceGroupName)
+  
+  dependsOn: [deploykeyvault , createresourcegroup , createtestsecret]
+}
 
 
 
