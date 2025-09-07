@@ -64,7 +64,7 @@ az deployment sub create --template-file solution2.main.bicep --location southaf
 ![](images/portal%20view/cleanup-resource-group-view-navigate-resource-group.png)
 ## Click on delete resource group
 ![](images/portal%20view/cleanup-delete-resource-group.png)
-## Enter resoruce group name for deletion
+## Enter resource group name for deletion
 ![](images/portal%20view/delete-resource-group-deletion.png)
 ## Confirm resource group deletion
 ![](images/portal%20view/confirm-resource-group-deletion.png)
