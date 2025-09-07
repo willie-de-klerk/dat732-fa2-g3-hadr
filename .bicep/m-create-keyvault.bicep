@@ -20,7 +20,7 @@ param bEnableSoftDelete bool
 
 
 module vault 'br/public:avm/res/key-vault/vault:0.13.3' = {
-    name: 'create-azure-key-vault'
+    name: 'createazurekeyvault'
     params: {
         name: sVaultName
         enableSoftDelete: bEnableSoftDelete

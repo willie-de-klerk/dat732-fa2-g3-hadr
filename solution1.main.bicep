@@ -71,7 +71,6 @@ module deploykeyvault '.bicep/m-create-keyvault.bicep' = {
 
 // Azure Key Vault Secret
 module createtestsecret '.bicep/m-create-secret.bicep' = {
-  name: '${sKeyVaultName}/secret/sql-admin-login'
   params: {
     sVaultName: sKeyVaultName
     sSecretName: sSQLAdministratorLoginUserName
@@ -119,7 +118,6 @@ module deploysqlserversecondary 'modules/m-create-sql-srv.bicep' = [for location
 // primary database 
 
 module deploydbprimary 'modules/m-create-database-primary.bicep' = {
-  name: '${sSQLServerInstanceName}/${sDatabaseName}'
   params: {
     sLocation: sLocationPrimary
     sDatabaseName: sDatabaseName
