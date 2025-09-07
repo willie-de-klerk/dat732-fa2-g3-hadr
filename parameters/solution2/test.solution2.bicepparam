@@ -17,7 +17,7 @@ param arrLocationSecondary = [
   secondary_type: Specify that the database is a secondary type. It can be either:
   'Geo'
   'Named'
-  'Standby' It allows for disaster recovery in anticipation of a failover event. Cannot serve read queries. Does not incur addiotnal licencing cost (upto 40% savings).
+  'Standby' It allows for disaster recovery in anticipation of a failover event. Cannot serve read queries. Does not incur additional licensing cost (upto 40% savings).
 */
 
 param arrResourceTags = [ 
