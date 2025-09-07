@@ -2,13 +2,17 @@ using '../../solution1.main.bicep'
 /* 
   file: parameters/solution1/dev.solution1.bicepparam
   purpose: We are making use of this bicep parameter file to specify our parameters for our testing environment.
+  A quick revision on parameter types: https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/parameters
+  What's a bicep parameter file? https://youtu.be/IL4P_1SrJng?si=zrAWtaqOQzcGhYkS
 */
 
 // Parameters
 // data type: array
-param arrLocationSecondary = ['uksouth','germanywestcentral']
+@allowed(['uksouth','germanywestcentral'])
+param arrLocationSecondary = ['uksouth']
 
-
+// data type: object
+param objDatabaseSku = {sku_name: 'GP_Gen5_2', tier: 'GeneralPurpose'}
 
 // data type: string
 param sLocationPrimary = 'southafricanorth'
@@ -23,6 +27,9 @@ param sSQLServerInstanceName = 'logistics-srv'
 param sMinimalTLSVersion = '1.2'
 param sPublicNetworkAccessEnabled = 'Enabled'
 param sIsIPv6Enabled = 'Disabled'
+  // Database Specific 
+param sDatabaseName = 'logisticsdb'
+param sRequestedBackupStorageRedundancy = 'Local'
 
 param sSQLAdministratorLoginUserName = 'AzureAdmin' 
 @Secure()

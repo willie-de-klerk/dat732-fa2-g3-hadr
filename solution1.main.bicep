@@ -3,12 +3,18 @@ targetScope='subscription'
   Solution1-(failover-groups)
   file: solution1.main.bicep
   purpose: We are making use of this bicep file as our main bicep file for our first proposed solution.
+
 */
 
 
 //Parameters
+// A quick revision: https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/parameters
 // data type: array
 param arrLocationSecondary array 
+
+// data type: object
+@metadata({sku_name: 'GP_Gen5_2', tier: 'GeneralPurpose'})
+param objDatabaseSku object
 
 // data type: string 
 param sResourceGroupName string
@@ -22,12 +28,16 @@ param sSQLServerInstanceName string
 param sMinimalTLSVersion string
 param sPublicNetworkAccessEnabled string 
 param sIsIPv6Enabled string
-
+      //Database Specific
+param sDatabaseName string
+param sRequestedBackupStorageRedundancy string 
 
 param sSQLAdministratorLoginUserName string
+
 @secure()
 param sSQLAdministratorLoginPassword string
 // data type: boolean
+
 param bEnableSoftDelete bool
 
 
@@ -35,6 +45,7 @@ param bEnableSoftDelete bool
 
   // Resource Group
 module createresourcegroup 'modules/m-create-resource-group.bicep' = {
+  name: sResourceGroupName
   params: {
     sLocation: sLocationPrimary
     sResourceGroupName: sResourceGroupName
@@ -44,6 +55,7 @@ module createresourcegroup 'modules/m-create-resource-group.bicep' = {
 
   // Azure Key Vault 
 module deploykeyvault '.bicep/m-create-keyvault.bicep' = {
+  name: sKeyVaultName
   params:{
     bEnableSoftDelete: bEnableSoftDelete
     sVaultName: sKeyVaultName
@@ -59,6 +71,7 @@ module deploykeyvault '.bicep/m-create-keyvault.bicep' = {
 
 // Azure Key Vault Secret
 module createtestsecret '.bicep/m-create-secret.bicep' = {
+  name: '${sKeyVaultName}/secret/sql-admin-login'
   params: {
     sVaultName: sKeyVaultName
     sSecretName: sSQLAdministratorLoginUserName
@@ -71,6 +84,7 @@ module createtestsecret '.bicep/m-create-secret.bicep' = {
 // primary  SQL server resource instance
 
 module deploysqlserver 'modules/m-create-sql-srv.bicep' = {
+  name: sSQLServerInstanceName
   params:{
     sName: sSQLServerInstanceName
     sAdministratorLoginUserName: sSQLAdministratorLoginUserName
@@ -85,7 +99,7 @@ module deploysqlserver 'modules/m-create-sql-srv.bicep' = {
   dependsOn: [createresourcegroup]
 }
 
-// secondary instances
+// secondary SQL Server instances
 
 module deploysqlserversecondary 'modules/m-create-sql-srv.bicep' = [for location in arrLocationSecondary: {
   name: '${sSQLServerInstanceName}-bak-${location}'
@@ -102,7 +116,34 @@ module deploysqlserversecondary 'modules/m-create-sql-srv.bicep' = [for location
   dependsOn: [createresourcegroup]
 }]
 
+// primary database 
 
+module deploydbprimary 'modules/m-create-database-primary.bicep' = {
+  name: '${sSQLServerInstanceName}/${sDatabaseName}'
+  params: {
+    sLocation: sLocationPrimary
+    sDatabaseName: sDatabaseName
+    sRequestedBackupStorageRedundancy: sRequestedBackupStorageRedundancy
+    sSQLServerName: sSQLServerInstanceName
+    sDatabaseSkuName: objDatabaseSku.sku_name
+    sDatabaseSkuTier: objDatabaseSku.tier
+  }
+  dependsOn: [deploysqlserver]
+  scope: az.resourceGroup(sResourceGroupName)
+}
+
+// failover group deployment
+
+module m 'modules/m-create-failover-group.bicep' = {
+  name: 'deployfailovergroup'
+  params:{
+    sPrimaryDatabaseName: sDatabaseName
+    sPrimarySQLServerName: sSQLServerInstanceName
+    sSecondarySQLServerName: 'logistics-srv-bak-uksouth'
+  }
+  scope: az.resourceGroup(sResourceGroupName)
+  dependsOn: [deploydbprimary]
+}
 
 
 
