@@ -1,6 +1,6 @@
 using '../../solution2.main.bicep'
 /* 
-  file: parameters/solution1/dev.solution1.bicepparam
+  file: parameters/solution2/test.solution2.bicepparam
   purpose: We are making use of this bicep parameter file to specify our parameters for our testing environment.
   A quick revision on parameter types: https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/parameters
   What's a bicep parameter file? https://youtu.be/IL4P_1SrJng?si=zrAWtaqOQzcGhYkS
