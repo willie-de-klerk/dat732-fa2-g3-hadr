@@ -20,6 +20,10 @@ param arrLocationSecondary = [
   'Standby' It allows for disaster recovery in anticipation of a failover event. Cannot serve read queries. Does not incur addiotnal licencing cost (upto 40% savings).
 */
 
+param arrResourceTags = [ 
+  {name: 'env', value: 'test'} 
+  {name: 'solution', value: '2'}]
+  
 
 // data type: object
 param objDatabaseSku = {sku_name: 'GP_Gen5_2', tier: 'GeneralPurpose'}

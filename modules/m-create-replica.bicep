@@ -19,6 +19,7 @@ param sRequestedBackupStorageStrategy string
 
 @description('value: logisticsdb')
 param sDatabaseName string
+
 param sDatabaseSKUName string
 
 param sDatabaseSKUTier string
@@ -35,7 +36,7 @@ resource sqlsrv 'Microsoft.Sql/servers@2024-11-01-preview' existing = {
 }
 
 resource logisticsdb 'Microsoft.Sql/servers/databases@2022-05-01-preview' = {
-  name: sDatabaseName
+  name: '${sSQLServerName}-bak-${sLocation}${sDatabaseName}'
   properties: {
     requestedBackupStorageRedundancy: sRequestedBackupStorageStrategy
     createMode: 'Secondary'

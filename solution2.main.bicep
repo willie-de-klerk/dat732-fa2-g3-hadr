@@ -11,7 +11,7 @@ targetScope='subscription'
 // A quick revision: https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/parameters
 // data type: array
 param arrLocationSecondary array 
-
+param arrResourceTags array
 // data type: object
 @metadata({sku_name: 'GP_Gen5_2', tier: 'GeneralPurpose'})
 param objDatabaseSku object
@@ -133,7 +133,6 @@ module deploydbprimary 'modules/m-create-database-primary.bicep' = {
 // Secondary databases
 
 module logisticsdbsecondary 'modules/m-create-replica.bicep' = [ for backup_db in arrLocationSecondary: {
-  name: '${sSQLServerInstanceName}-bak-${backup_db.location}/${sDatabaseName}'
   params: {
     sLocation: backup_db.location
     sDatabaseName: sDatabaseName
@@ -147,6 +146,16 @@ module logisticsdbsecondary 'modules/m-create-replica.bicep' = [ for backup_db i
   scope: az.resourceGroup(sResourceGroupName)
   dependsOn: [deploydbprimary]
 }]
+
+// add resource tagging policies
+
+module policy 'modules/m-policy-append-tag.bicep' = {
+  params: {
+    arrResourceTags: arrResourceTags
+    
+  }
+  scope: az.resourceGroup(sResourceGroupName)
+}
 
 
 // author: @willie-de-klerk
