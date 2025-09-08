@@ -33,9 +33,25 @@ param sDatabaseName string
 param sRequestedBackupStorageRedundancy string 
 
 param sSQLAdministratorLoginUserName string
-
 @secure()
 param sSQLAdministratorLoginPassword string
+
+  // Long term policy
+
+@description('The montly retention policy for an LTR backup in an ISO 8601 format.')
+param sMontlyRetention string
+
+@description('The weekly retention policy for an LTR backup in an ISO 8601 format.')
+param sWeeklyRetention string
+
+@description('The yearly retention policy for an LTR backup in an ISO 8601 format. example value: P5Y')
+param sYearlyRetention string
+
+// data type: integer
+@allowed([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,31,32,33,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50,51,52])
+@description('The week of year to take the yearly backup in an ISO 8601 format.	')
+param iWeekOfYear int
+
 // data type: boolean
 
 param bEnableSoftDelete bool
@@ -137,5 +153,18 @@ module backuppolicy 'modules/m-create-database-backup-policy-short-term.bicep' =
   scope: az.resourceGroup(sResourceGroupName)
   dependsOn: [deploydbprimary]
 }
+
+module backuppolicylong 'modules/m-create-database-backup-policy-long-term.bicep' = {
+  params: {
+    sDatabaseName: sDatabaseName
+    sSQLServerInstanceName: sSQLServerInstanceName
+    sWeeklyRetention: sWeeklyRetention
+    sMontlyRetention: sMontlyRetention
+    sYearlyRetention: sYearlyRetention
+    iWeekOfYear: iWeekOfYear
+  }
+  scope: az.resourceGroup(sResourceGroupName)
+  dependsOn: [backuppolicy]
+} // Example values: https://learn.microsoft.com/en-us/rest/api/sql/long-term-retention-policies/list-by-database?view=rest-sql-2023-08-01&tabs=HTTP#:~:text=%7B%0A%20%20%22value%22,%3A%205%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%5D%0A%7D
 
 // author: @willie-de-klerk
