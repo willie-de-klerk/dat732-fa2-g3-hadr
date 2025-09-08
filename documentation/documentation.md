@@ -5,4 +5,4 @@
 - [Solution1-(failover-groups)](/documentation/examples/solution1/solution1.md)
 ### Solution 2 Geo Replicas
 ![](/documentation/examples/solution2/images/portal%20view/portal-view-replicas.png)
-- [Solution2(geo-replicas)](/documentation/examples/solution2/solution2.md)
+- [Solution2-(geo-replicas)](/documentation/examples/solution2/solution2.md)
