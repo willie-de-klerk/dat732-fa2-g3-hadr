@@ -19,7 +19,7 @@ param objDatabaseSku = {sku_name: 'GP_Gen5_2', tier: 'GeneralPurpose'}
 param objShortTermBackupRetentionPolicy = {diff_backup_interval_in_hours: 12, retention_days: 7}
 
 // data type: string
-param sLocationPrimary = 'southafricanorth'
+param sLocationPrimary = 'austriaeast'
 param sResourceGroupName = 'group3hadr-rg'
 param sKeyVaultName = 'dat732group3fa2keyvault'
 param sRoleAssignmentName = '00482a5a-887f-4fb3-b363-3b7fe8e74483'
