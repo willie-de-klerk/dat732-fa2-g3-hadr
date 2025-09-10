@@ -64,3 +64,14 @@ We haven't had this running long enough to have a backup created by our long ter
 
 ![](/documentation/examples/solution3/images/az-portal/point-in-time-restore-review.png)
 
+### Logistics SQL Server overview
+
+![](/documentation/examples/solution3/images/az-portal/logistics-srv-overview.png)
+
+# Cleanup
+
+![](/documentation/examples/solution3/images/az-cli/cleanup.png)
+
+```
+az group delete --name group3hadr-rg
+```
