@@ -10,7 +10,7 @@ using '../../solution3.main.bicep'
 // data type: array
 param arrResourceTags = [ 
   {name: 'env', value: 'test'} 
-  {name: 'solution', value: '2'}]
+  {name: 'solution', value: '3'}]
   
 
 // data type: object
