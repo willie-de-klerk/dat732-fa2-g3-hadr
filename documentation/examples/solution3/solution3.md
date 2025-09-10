@@ -10,7 +10,7 @@ Azure SQL Database automatically creates the following backups:
     - Purpose: Allows us to back up and restore only the data that has changed since the last full backup. It's beneficial since it will allow us to have backups without the overhead of full backups.
 3. [Transaction log backups](https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/transaction-log-backups-sql-server?view=sql-server-ver17) 
     - Frequency: give or take every +10 minutes.
-    - Purpose: After having our full bacup we can use the transaction log backup to minimize work loss.
+    - Purpose: After having our full backup we can use the transaction log backup to minimize work loss.
 ### Short term retention policy
 ![](/documentation/examples/solution3/images/az-cli/az-cli-ltr-policy-show.png)
 ### Long term retention policy
