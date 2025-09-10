@@ -154,6 +154,7 @@ module policy 'modules/m-policy-append-tag.bicep' = {
     arrResourceTags: arrResourceTags
     
   }
+  dependsOn: [createresourcegroup]
   scope: az.resourceGroup(sResourceGroupName)
 }
 
